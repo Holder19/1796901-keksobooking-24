@@ -1,6 +1,6 @@
 const getIntegerFromRange = function (min, max) {
   if (min < 0 || max <= min) {
-    getIntegerFromRange('Недопустимое значение диапазона');
+    return('Недопустимое значение диапазона');
   }
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
