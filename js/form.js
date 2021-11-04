@@ -19,6 +19,8 @@ const userPriceInput = adForm.querySelector('#price');
 const formType = adForm.querySelector('#type');
 const formGuests = adForm.querySelector('#capacity');
 const formRooms = adForm.querySelector('#room_number');
+const inTime = adForm.querySelector('#timein');
+const outTime = adForm.querySelector('#timeout');
 
 const deactivateForm = () => {
   adForm.classList.add('ad-form--disabled');
@@ -95,15 +97,32 @@ const checkValidityRooms = () => {
   formGuests.reportValidity();
 };
 
-
 const onRoomsChange = () => {
   formRooms.addEventListener('change', checkValidityRooms);
+};
+
+const checkIntime = () => {
+  outTime.value = inTime.value;
+};
+
+const checkOutTime = () => {
+  inTime.value = outTime.value;
+};
+
+const onTimeInChange = () => {
+  inTime.addEventListener('change', checkIntime);
+};
+
+const onTimeOutChange = () => {
+  outTime.addEventListener('change', checkOutTime);
 };
 
 const checkValidityForm = () => {
   onInputTitle();
   onPriceChange();
   onRoomsChange();
+  onTimeInChange();
+  onTimeOutChange();
 };
 
 export {checkValidityForm, deactivateForm, activateForm};
