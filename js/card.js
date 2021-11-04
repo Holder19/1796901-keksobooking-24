@@ -8,7 +8,8 @@ const typesHousing = {
   hotel: 'Отель',
 };
 
-const renderCard = ({title, description, price, address, rooms, guests, checkin, checkout, type, photos, author, features}) => {
+const renderCard = ({title, description, price, address, rooms,
+  guests, checkin, checkout, type, photos, author, features}) => {
   const cardElement = cardTemplate.cloneNode(true);
 
   if (title) {
@@ -73,7 +74,7 @@ const renderCard = ({title, description, price, address, rooms, guests, checkin,
     cardElement.querySelector('.popup__avatar').remove();
   }
 
-  if(features) {
+  if (features) {
     const featuresList = cardElement.querySelector('.popup__features');
     const featuresitems = featuresList.querySelectorAll('.popup__feature');
     featuresitems.forEach((featuresItem) => {
