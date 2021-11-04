@@ -1,26 +1,26 @@
 const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
 const MAX_PRICE_PER_NIGHT = 1000000;
-const MIN_PRICE_PER_NIGHT = {
+const MAX_ROOMS = 100;
+const NOT_FOR_GUESTS = 0;
+const minPricePerNight = {
   bungalow: 0,
   flat: 1000,
   hotel: 3000,
   house: 5000,
   palace: 10000,
 };
-const MAX_ROOMS = 100;
-const NOT_FOR_GUESTS = 0;
 const adForm = document.querySelector('.ad-form');
 const adFormElements = adForm.querySelectorAll('.ad-form__element');
 const mapFilters = document.querySelector('.map__filters');
 const mapFiltersElements = mapFilters.querySelectorAll('select, fieldset');
-const userTitleInput = adForm.querySelector('#title');
-const userPriceInput = adForm.querySelector('#price');
-const formType = adForm.querySelector('#type');
-const formGuests = adForm.querySelector('#capacity');
-const formRooms = adForm.querySelector('#room_number');
-const inTime = adForm.querySelector('#timein');
-const outTime = adForm.querySelector('#timeout');
+const inputTitle = adForm.querySelector('#title');
+const inputPrice = adForm.querySelector('#price');
+const inputType = adForm.querySelector('#type');
+const inputGuests = adForm.querySelector('#capacity');
+const inputRooms = adForm.querySelector('#room_number');
+const inputInTimeIn = adForm.querySelector('#timein');
+const inputTimeOut = adForm.querySelector('#timeout');
 
 const deactivateForm = () => {
   adForm.classList.add('ad-form--disabled');
@@ -44,86 +44,68 @@ const activateForm = () => {
   });
 };
 
-const checkValidityTitle = () => {
-  const valueLength = userTitleInput.value.length;
+const onTitleInput = () => {
+  const valueLength = inputTitle.value.length;
 
   if (valueLength < MIN_LENGTH_TITLE) {
-    userTitleInput.setCustomValidity(`Введите еще ${MIN_LENGTH_TITLE - valueLength} символов`);
+    inputTitle.setCustomValidity(`Введите еще ${MIN_LENGTH_TITLE - valueLength} символов`);
   } else if (valueLength > MAX_LENGTH_TITLE) {
-    userTitleInput.setCustomValidity(`Удалите ${MAX_LENGTH_TITLE - valueLength} символов`);
+    inputTitle.setCustomValidity(`Удалите ${MAX_LENGTH_TITLE - valueLength} символов`);
   } else {
-    userTitleInput.setCustomValidity('');
+    inputTitle.setCustomValidity('');
   }
 
-  userTitleInput.reportValidity();
-};
-
-const onInputTitle = () => {
-  userTitleInput.addEventListener('input', checkValidityTitle);
-};
-
-const checkValidityPrice = () => {
-  const minPrice = MIN_PRICE_PER_NIGHT[formType.value];
-  const price = userPriceInput.value;
-
-  userPriceInput.placeholder = minPrice;
-  userPriceInput.min = minPrice;
-  if (price > MAX_PRICE_PER_NIGHT) {
-    userPriceInput.setCustomValidity(`Максимальная цена ${MAX_PRICE_PER_NIGHT}`);
-  } else if (price < minPrice) {
-    userPriceInput.setCustomValidity(`Минимальная цена ${minPrice}`);
-  } else {
-    userPriceInput.setCustomValidity('');
-  }
-
-  userPriceInput.reportValidity();
+  inputTitle.reportValidity();
 };
 
 const onPriceChange = () => {
-  formType.addEventListener('change', checkValidityPrice);
-};
+  const minPrice = minPricePerNight[inputType.value];
+  const price = inputPrice.value;
 
-const checkValidityRooms = () => {
-  const rooms = Number(formRooms.value);
-  const guests = Number(formGuests.value);
-  if (guests > rooms) {
-    formGuests.setCustomValidity(`Максимальное количество гостей ${rooms}`);
-  } else if (rooms === MAX_ROOMS && guests !== NOT_FOR_GUESTS) {
-    formGuests.setCustomValidity('Не для гостей');
+  inputPrice.placeholder = minPrice;
+  inputPrice.min = minPrice;
+  if (price > MAX_PRICE_PER_NIGHT) {
+    inputPrice.setCustomValidity(`Максимальная цена ${MAX_PRICE_PER_NIGHT}`);
+  } else if (price < minPrice) {
+    inputPrice.setCustomValidity(`Минимальная цена ${minPrice}`);
   } else {
-    formGuests.setCustomValidity('');
+    inputPrice.setCustomValidity('');
   }
 
-  formGuests.reportValidity();
+  inputPrice.reportValidity();
 };
 
 const onRoomsChange = () => {
-  formRooms.addEventListener('change', checkValidityRooms);
-};
+  const rooms = Number(inputRooms.value);
+  const guests = Number(inputGuests.value);
+  if (guests > rooms) {
+    inputGuests.setCustomValidity(`Максимальное количество гостей ${rooms}`);
+  } else if (rooms === MAX_ROOMS && guests !== NOT_FOR_GUESTS) {
+    inputGuests.setCustomValidity('Не для гостей');
+  } else {
+    inputGuests.setCustomValidity('');
+  }
 
-const checkIntime = () => {
-  outTime.value = inTime.value;
-};
-
-const checkOutTime = () => {
-  inTime.value = outTime.value;
+  inputGuests.reportValidity();
 };
 
 const onTimeInChange = () => {
-  inTime.addEventListener('change', checkIntime);
+  inputTimeOut.value = inputInTimeIn.value;
 };
 
 const onTimeOutChange = () => {
-  outTime.addEventListener('change', checkOutTime);
+  inputInTimeIn.value = inputTimeOut.value;
 };
 
-const checkValidityForm = () => {
-  onInputTitle();
-  onPriceChange();
-  onRoomsChange();
-  onTimeInChange();
-  onTimeOutChange();
+const addListenersOnForm = () => {
+  inputTitle.addEventListener('input', onTitleInput);
+  inputType.addEventListener('change', onPriceChange);
+  inputRooms.addEventListener('change', onRoomsChange);
+  inputGuests.addEventListener('change', onRoomsChange);
+  inputInTimeIn.addEventListener('change', onTimeInChange);
+  inputTimeOut.addEventListener('change', onTimeOutChange);
+
 };
 
-export {checkValidityForm, deactivateForm, activateForm};
+export {addListenersOnForm, deactivateForm, activateForm};
 
