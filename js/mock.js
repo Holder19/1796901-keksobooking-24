@@ -41,8 +41,8 @@ const PHOTOS = [
 const OBJECT_COUNT = 10;
 
 const getLocation = () => ({
-  latitude: getRandomPositiveFloat(35.65, 35.7, 5),
-  longitude: getRandomPositiveFloat(139.7, 139.8, 5),
+  lat: getRandomPositiveFloat(35.65, 35.7, 5),
+  lng: getRandomPositiveFloat(139.7, 139.8, 5),
 });
 
 const createOffer = () => {
@@ -52,7 +52,7 @@ const createOffer = () => {
       avatar: `img/avatars/user${createAvatarNumber(getRandomPositiveInteger(1, 10))}.png`,
     },
     title: getRandomArrayElement(TITLES),
-    address: `${location.latitude}, ${location.longitude}`,
+    address: `${location.lat}, ${location.lng}`,
     price: getRandomPositiveInteger(0, 100000),
     type: getRandomArrayElement(TYPES),
     rooms: getRandomPositiveInteger(0, 15),

@@ -89,7 +89,7 @@ const renderCard = ({title, description, price, address, rooms,
     cardElement.querySelector('.popup__features').remove();
   }
 
-  map.appendChild(cardElement);
+  return cardElement;
 };
 
 export {renderCard};
