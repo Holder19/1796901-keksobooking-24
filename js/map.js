@@ -1,56 +1,73 @@
-import {deactivateForm, activateForm} from './form.js';
-import {renderCard} from './card.js';
-import {createAdvertisements, OBJECT_COUNT} from './mock.js';
-const initMap = () => {
-  deactivateForm();
-  const map = L.map('map-canvas')
-    .on('load',activateForm)
-    .setView({
-      lat: 35.6895000,
-      lng: 139.6917100,
-    }, 10);
+import { renderCard } from './card.js';
+import { activateForm , deactivateForm} from './form.js';
+const DefaultSettingsMap = {
+  LAT: 35.6895000,
+  LNG: 139.6917100,
+  ZOOM: 10,
+};
 
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    })
-    .addTo(map);
+const DefaultMainPinSettings = {
+  WIDTH: 52,
+  HEIGHT: 52,
+  URL: '../img/main-pin.svg',
+};
 
-  const mainPinIcon = L.icon({
-    iconUrl: '../img/main-pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
-  });
+const DefaultPinSettings = {
+  WIDTH: 40,
+  HEIGHT: 40,
+  URL: '../img/pin.svg',
+};
 
-  const mainPinMarker = L.marker(
-    {
-      lat: 35.6895000,
-      lng: 139.6917100,
-    },
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-  mainPinMarker.addTo(map);
+const address = document.querySelector('#address');
 
-  const address = document.querySelector('#address');
+deactivateForm();
+const map = L.map('map-canvas')
+  .on('load',activateForm)
+  .setView({
+    lat: DefaultSettingsMap.LAT,
+    lng: DefaultSettingsMap.LNG,
+  }, DefaultSettingsMap.ZOOM);
 
-  const onMarkerMove = (evt) => {
-    const lat = evt.target.getLatLng().lat.toFixed(5);
-    const lng = evt.target.getLatLng().lng.toFixed(5);
-    address.value = `${lat}, ${lng}`;
-  };
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  })
+  .addTo(map);
 
-  mainPinMarker.on('move', onMarkerMove);
+const mainPinIcon = L.icon({
+  iconUrl: DefaultMainPinSettings.URL,
+  iconSize: [DefaultMainPinSettings.WIDTH, DefaultMainPinSettings.HEIGHT],
+  iconAnchor: [(DefaultMainPinSettings.WIDTH / 2), DefaultMainPinSettings.HEIGHT],
+});
 
-  const advertisements = createAdvertisements(OBJECT_COUNT);
-  advertisements.forEach ((advertisement) => {
+const mainPinMarker = L.marker(
+  {
+    lat: DefaultSettingsMap.LAT,
+    lng: DefaultSettingsMap.LNG,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+mainPinMarker.addTo(map);
+
+const onMarkerMove = (evt) => {
+  const lat = evt.target.getLatLng().lat.toFixed(5);
+  const lng = evt.target.getLatLng().lng.toFixed(5);
+  address.value = `${lat}, ${lng}`;
+};
+
+mainPinMarker.on('move', onMarkerMove);
+
+const markerGroup = L.layerGroup().addTo(map);
+const createMarkers = (advertisements) => {
+  advertisements.forEach((advertisement) => {
     const pinIcon = L.icon({
-      iconUrl: '../img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
+      iconUrl: DefaultPinSettings.URL,
+      iconSize: [DefaultPinSettings.WIDTH, DefaultPinSettings.HEIGHT],
+      iconAnchor: [(DefaultPinSettings.WIDTH / 2), DefaultPinSettings.HEIGHT],
     });
 
     const marker = L.marker(
@@ -63,9 +80,9 @@ const initMap = () => {
       },
     );
 
-    marker.addTo(map)
+    marker.addTo(markerGroup)
       .bindPopup(renderCard(advertisement));
   });
-
 };
-export {initMap};
+
+export {createMarkers};
