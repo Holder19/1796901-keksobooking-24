@@ -1,9 +1,8 @@
 import { renderCard } from './card.js';
-import { activateForm , deactivateForm} from './form.js';
 const DefaultSettingsMap = {
   LAT: 35.6895000,
   LNG: 139.6917100,
-  ZOOM: 10,
+  ZOOM: 13,
 };
 
 const DefaultMainPinSettings = {
@@ -20,9 +19,10 @@ const DefaultPinSettings = {
 
 const address = document.querySelector('#address');
 
-deactivateForm();
 const map = L.map('map-canvas')
-  .on('load',activateForm)
+  .on('load', () => {
+    address.value = `${DefaultSettingsMap.LAT.toFixed(5)}, ${DefaultSettingsMap.LNG.toFixed(5)}`;
+  })
   .setView({
     lat: DefaultSettingsMap.LAT,
     lng: DefaultSettingsMap.LNG,
@@ -62,6 +62,7 @@ const onMarkerMove = (evt) => {
 mainPinMarker.on('move', onMarkerMove);
 
 const markerGroup = L.layerGroup().addTo(map);
+
 const createMarkers = (advertisements) => {
   advertisements.forEach((advertisement) => {
     const pinIcon = L.icon({
@@ -85,4 +86,17 @@ const createMarkers = (advertisements) => {
   });
 };
 
-export {createMarkers};
+const resetMarkers = () => {
+  mainPinMarker.setLatLng({
+    lat: DefaultSettingsMap.LAT,
+    lng: DefaultSettingsMap.LNG,
+  });
+  map.setView({
+    lat: DefaultSettingsMap.LAT,
+    lng: DefaultSettingsMap.LNG,
+  }, DefaultSettingsMap.ZOOM);
+  map.closePopup();
+  markerGroup.clearLayers();
+};
+
+export {createMarkers, DefaultSettingsMap, resetMarkers};

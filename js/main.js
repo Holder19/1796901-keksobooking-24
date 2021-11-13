@@ -1,8 +1,14 @@
-import {addListenersOnForm} from './form.js';
-import {createAdvertisements} from './mock.js';
+import {activateForm, addListenersOnForm, deactivateForm, onUserFormSubmit} from './form.js';
 import { createMarkers } from './map.js';
+import { getData } from './api.js';
 const MARKERS_COUNT = 10;
 
-createMarkers(createAdvertisements(MARKERS_COUNT));
-addListenersOnForm();
+deactivateForm();
 
+getData((advertisements) => {
+  activateForm();
+  createMarkers(advertisements.slice(0, MARKERS_COUNT));
+
+});
+addListenersOnForm();
+onUserFormSubmit();
