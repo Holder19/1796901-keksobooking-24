@@ -1,5 +1,5 @@
 import { sendData } from './api.js';
-import {DefaultSettingsMap, resetMarkers } from './map.js';
+import { DefaultSettingsMap, resetMarkers } from './map.js';
 import { isEscapeKey} from './utils.js';
 
 const MIN_LENGTH_TITLE = 30;
@@ -104,14 +104,15 @@ const onTimeOutChange = () => {
   inputInTimeIn.value = inputTimeOut.value;
 };
 
-const resetForm = () => {
+const resetForm = (cb) => {
   adForm.reset();
   resetMarkers();
   address.value = `${DefaultSettingsMap.LAT.toFixed(5)}, ${DefaultSettingsMap.LNG.toFixed(5)}`;
   mapFilters.reset();
+  cb();
 };
 
-const onSuccess = () => {
+const onSuccess = (cb) => {
   const successMesage = successTemplate.cloneNode(true);
   document.body.appendChild(successMesage);
 
@@ -124,7 +125,7 @@ const onSuccess = () => {
       successMesage.remove();
     }
   });
-  resetForm();
+  resetForm(cb);
 };
 
 const onFail= () => {
@@ -144,19 +145,19 @@ const onFail= () => {
   });
 };
 
-const onUserFormSubmit = () => {
+const addUserFormSubmitHandler = (cb) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     sendData(
-      () => onSuccess(),
+      () => onSuccess(cb),
       () => onFail(),
       new FormData(evt.target),
     );
   });
 };
 
-const addListenersOnForm = () => {
+const addListenersOnForm = (cb) => {
   inputTitle.addEventListener('input', onTitleInput);
   inputType.addEventListener('change', onPriceChange);
   inputRooms.addEventListener('change', onRoomsChange);
@@ -164,9 +165,9 @@ const addListenersOnForm = () => {
   inputInTimeIn.addEventListener('change', onTimeInChange);
   inputTimeOut.addEventListener('change', onTimeOutChange);
   adForm.addEventListener('reset', () => {
-    resetForm();
+    resetForm(cb);
   });
 };
 
-export {addListenersOnForm, deactivateForm, activateForm, onUserFormSubmit};
+export {addListenersOnForm, deactivateForm, activateForm, addUserFormSubmitHandler};
 
