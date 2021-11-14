@@ -8,13 +8,13 @@ const DefaultSettingsMap = {
 const DefaultMainPinSettings = {
   WIDTH: 52,
   HEIGHT: 52,
-  URL: '../img/main-pin.svg',
+  URL: './img/main-pin.svg',
 };
 
 const DefaultPinSettings = {
   WIDTH: 40,
   HEIGHT: 40,
-  URL: '../img/pin.svg',
+  URL: './img/pin.svg',
 };
 
 const address = document.querySelector('#address');
