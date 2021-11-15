@@ -1,3 +1,7 @@
+import { sendData } from './api.js';
+import { DefaultSettingsMap, resetMarkers } from './map.js';
+import { isEscapeKey} from './utils.js';
+
 const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
 const MAX_PRICE_PER_NIGHT = 1000000;
@@ -21,6 +25,9 @@ const inputGuests = adForm.querySelector('#capacity');
 const inputRooms = adForm.querySelector('#room_number');
 const inputInTimeIn = adForm.querySelector('#timein');
 const inputTimeOut = adForm.querySelector('#timeout');
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const address = adForm.querySelector('#address');
 
 const deactivateForm = () => {
   adForm.classList.add('ad-form--disabled');
@@ -97,15 +104,70 @@ const onTimeOutChange = () => {
   inputInTimeIn.value = inputTimeOut.value;
 };
 
-const addListenersOnForm = () => {
+const resetForm = (cb) => {
+  adForm.reset();
+  resetMarkers();
+  address.value = `${DefaultSettingsMap.LAT.toFixed(5)}, ${DefaultSettingsMap.LNG.toFixed(5)}`;
+  mapFilters.reset();
+  cb();
+};
+
+const onSuccess = (cb) => {
+  const successMesage = successTemplate.cloneNode(true);
+  document.body.appendChild(successMesage);
+
+  successMesage.addEventListener('click', () => {
+    successMesage.remove();
+  });
+
+  document.addEventListener('keydown', (evt) => {
+    if(isEscapeKey(evt)) {
+      successMesage.remove();
+    }
+  });
+  resetForm(cb);
+};
+
+const onFail= () => {
+  const errorMessage = errorTemplate.cloneNode(true);
+  const errorButton = errorMessage.querySelector('.error__button');
+  document.body.appendChild(errorMessage);
+  errorMessage.addEventListener('click', () => {
+    errorMessage.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    if(isEscapeKey(evt)) {
+      errorMessage.remove();
+    }
+  });
+  errorButton.addEventListener('click', () => {
+    errorMessage.remove();
+  });
+};
+
+const addUserFormSubmitHandler = (cb) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(cb),
+      () => onFail(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+const addListenersOnForm = (cb) => {
   inputTitle.addEventListener('input', onTitleInput);
   inputType.addEventListener('change', onPriceChange);
   inputRooms.addEventListener('change', onRoomsChange);
   inputGuests.addEventListener('change', onRoomsChange);
   inputInTimeIn.addEventListener('change', onTimeInChange);
   inputTimeOut.addEventListener('change', onTimeOutChange);
-
+  adForm.addEventListener('reset', () => {
+    resetForm(cb);
+  });
 };
 
-export {addListenersOnForm, deactivateForm, activateForm};
+export {addListenersOnForm, deactivateForm, activateForm, addUserFormSubmitHandler};
 

@@ -1,4 +1,4 @@
-const map = document.querySelector('#map-canvas');
+
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const typesHousing = {
   flat: 'Квартира',
@@ -8,8 +8,9 @@ const typesHousing = {
   hotel: 'Отель',
 };
 
-const renderCard = ({title, description, price, address, rooms,
-  guests, checkin, checkout, type, photos, author, features}) => {
+const renderCard = ({author, offer}) => {
+  const {title, description, price, rooms,
+    guests, checkin, checkout, type, photos, address, features} = offer;
   const cardElement = cardTemplate.cloneNode(true);
 
   if (title) {
