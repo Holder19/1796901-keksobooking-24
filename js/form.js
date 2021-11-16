@@ -7,6 +7,7 @@ const MAX_LENGTH_TITLE = 100;
 const MAX_PRICE_PER_NIGHT = 1000000;
 const MAX_ROOMS = 100;
 const NOT_FOR_GUESTS = 0;
+const NUMBER_AFTER_DECIMAL = 5;
 const minPricePerNight = {
   bungalow: 0,
   flat: 1000,
@@ -107,7 +108,7 @@ const onTimeOutChange = () => {
 const resetForm = (cb) => {
   adForm.reset();
   resetMarkers();
-  address.value = `${DefaultSettingsMap.LAT.toFixed(5)}, ${DefaultSettingsMap.LNG.toFixed(5)}`;
+  address.value = `${DefaultSettingsMap.LAT.toFixed(NUMBER_AFTER_DECIMAL)}, ${DefaultSettingsMap.LNG.toFixed(NUMBER_AFTER_DECIMAL)}`;
   mapFilters.reset();
   cb();
 };
