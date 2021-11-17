@@ -43,7 +43,7 @@ const renderCard = ({author, offer}) => {
     cardElement.querySelector('.popup__text--capacity').remove();
   }
 
-  if (checkin, checkout) {
+  if (checkin && checkout) {
     cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
   } else {
     cardElement.querySelector('.popup__text--time').remove();
@@ -58,12 +58,16 @@ const renderCard = ({author, offer}) => {
   if (photos) {
     const photoContainer =  cardElement.querySelector('.popup__photos');
     const photoItem = photoContainer.querySelector('.popup__photo');
+    const photoListFragment = document.createDocumentFragment();
     photoContainer.innerHTML = '';
     photos.forEach((photo) => {
       const photoElement = photoItem.cloneNode(true);
       photoElement.src = photo;
-      photoContainer.appendChild(photoElement);
+      photoListFragment.appendChild(photoElement);
     });
+
+    photoContainer.appendChild(photoListFragment);
+
   } else {
     cardElement.querySelector('.popup__photo').remove();
   }
