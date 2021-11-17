@@ -59,14 +59,14 @@ const renderCard = ({author, offer}) => {
     const photoContainer =  cardElement.querySelector('.popup__photos');
     const photoItem = photoContainer.querySelector('.popup__photo');
     const photoListFragment = document.createDocumentFragment();
-
+    photoContainer.innerHTML = '';
     photos.forEach((photo) => {
       const photoElement = photoItem.cloneNode(true);
       photoElement.src = photo;
       photoListFragment.appendChild(photoElement);
-      photoContainer.innerHTML = '';
-      photoContainer.appendChild(photoListFragment);
     });
+
+    photoContainer.appendChild(photoListFragment);
 
   } else {
     cardElement.querySelector('.popup__photo').remove();

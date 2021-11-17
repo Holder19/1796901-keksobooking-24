@@ -1,8 +1,8 @@
 const DEFAULT_PICTURE_URL = 'img/muffin-grey.svg';
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const userPictureSettings = {
-  width: '70',
-  height: '70',
+  width: 70,
+  height: 70,
   alt : 'Фотография вашего жилья',
 };
 
@@ -11,7 +11,7 @@ const houseImgInput = document.querySelector('.ad-form__input');
 const previewAvatar = document.querySelector('.ad-form-header__preview').querySelector('img');
 const previewHouse = document.querySelector('.ad-form__photo');
 
-const addChangePreviewAvatar = () => {
+const addChangePreviewAvatarHandler = () => {
 
   const fileAvatar = avatarInput.files[0];
   const fileAvatarName = fileAvatar.name.toLowerCase();
@@ -26,14 +26,13 @@ const addChangePreviewAvatar = () => {
 
 const houseImg = document.createElement('img');
 const createElement = (container) => {
-
   houseImg.width = userPictureSettings.width;
   houseImg.height = userPictureSettings.height;
   houseImg.alt = userPictureSettings.alt;
   return container.appendChild(houseImg);
 };
 
-const addChangePreviewHouse = () => {
+const addChangePreviewHouseHandler = () => {
   const fileHouse = houseImgInput.files[0];
   const fileHouseName = fileHouse.name.toLowerCase();
 
@@ -52,8 +51,8 @@ const resetPhotos = () => {
 };
 
 const setListenerInputFile = () => {
-  avatarInput.addEventListener('change', addChangePreviewAvatar);
-  houseImgInput.addEventListener('change', addChangePreviewHouse);
+  avatarInput.addEventListener('change', addChangePreviewAvatarHandler);
+  houseImgInput.addEventListener('change', addChangePreviewHouseHandler);
 };
 
 export {setListenerInputFile, resetPhotos };
