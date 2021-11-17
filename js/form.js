@@ -1,4 +1,5 @@
 import { sendData } from './api.js';
+import { resetPhotos } from './avatar.js';
 import { DefaultSettingsMap, resetMarkers } from './map.js';
 import { isEscapeKey} from './utils.js';
 
@@ -108,6 +109,7 @@ const onTimeOutChange = () => {
 const resetForm = (cb) => {
   adForm.reset();
   resetMarkers();
+  resetPhotos();
   address.value = `${DefaultSettingsMap.LAT.toFixed(NUMBER_AFTER_DECIMAL)}, ${DefaultSettingsMap.LNG.toFixed(NUMBER_AFTER_DECIMAL)}`;
   mapFilters.reset();
   cb();
@@ -136,11 +138,13 @@ const onFail= () => {
   errorMessage.addEventListener('click', () => {
     errorMessage.remove();
   });
+
   document.addEventListener('keydown', (evt) => {
     if(isEscapeKey(evt)) {
       errorMessage.remove();
     }
   });
+
   errorButton.addEventListener('click', () => {
     errorMessage.remove();
   });
@@ -160,6 +164,7 @@ const addUserFormSubmitHandler = (cb) => {
 
 const addListenersOnForm = (cb) => {
   inputTitle.addEventListener('input', onTitleInput);
+  inputPrice.addEventListener('change', onPriceChange);
   inputType.addEventListener('change', onPriceChange);
   inputRooms.addEventListener('change', onRoomsChange);
   inputGuests.addEventListener('change', onRoomsChange);
