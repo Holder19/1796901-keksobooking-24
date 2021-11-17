@@ -20,7 +20,7 @@ const housingPrice = mapFilters.querySelector('#housing-price');
 const housingRooms = mapFilters.querySelector('#housing-rooms');
 const housingGuests = mapFilters.querySelector('#housing-guests');
 
-const filteredAds = ({offer}) => {
+const checkFilterInputs = ({offer}) => {
   const checkedFeatures = mapFilters.querySelectorAll('input[name="features"]:checked');
 
   let isType = true;
@@ -58,7 +58,7 @@ const filteredAds = ({offer}) => {
   return isType && isRooms && isGuests && isFeatures && isPrice;
 };
 
-const addFilterOnAds = (advertisements) => advertisements.filter(filteredAds);
+const addFilterOnAds = (advertisements) => advertisements.filter(checkFilterInputs);
 
 const addFiltersHandler = (cb) => {
   mapFilters.addEventListener('change', () => {
